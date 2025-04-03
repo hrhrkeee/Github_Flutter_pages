@@ -1,0 +1,30 @@
+name: Build and Deploy Flutter Web to GitHub Pages (FlutterウェブアプリのビルドとGitHub Pagesへのデプロイ)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code (コードのチェックアウト)
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter (Flutterのセットアップ)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Get dependencies (依存関係の取得)
+        run: flutter pub get
+
+      - name: Build Flutter web (Flutterウェブのビルド)
+        run: flutter build web --release
+
+      - name: Deploy to GitHub Pages (GitHub Pagesへのデプロイ)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
